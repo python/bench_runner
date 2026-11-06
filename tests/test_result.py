@@ -122,3 +122,7 @@ def test_from_scratch(monkeypatch):
         f"bm-20221119-{platform.system().lower()}-{platform.machine().lower()}"
         f"-my%2dfork-9d38120e335357a3b294-{platform.python_version()}-b7e4f1d.json"
     )
+
+    result = mod_result.Result.from_scratch(python, "my-fork", "jit/free-threading")
+    assert result.ref == "jit_free_threading"
+    assert result.filename.parent.parent == Path("results")
