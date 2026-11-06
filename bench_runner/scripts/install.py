@@ -220,9 +220,9 @@ def generate_benchmark(dst: Any) -> Any:
             continue
         if "with" in job:
             for flag in flags.FLAGS:
-                job["with"][
-                    flag.gha_variable
-                ] = f"${{{{ inputs.{flag.gha_variable} }}}}"
+                job["with"][flag.gha_variable] = (
+                    f"${{{{ inputs.{flag.gha_variable} }}}}"
+                )
 
     # Include all of the flags in the human-readable workflow "run name"
     dst["run-name"] += " " + " ".join(

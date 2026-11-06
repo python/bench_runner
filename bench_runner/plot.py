@@ -248,9 +248,9 @@ class LongitudinalPlotConfig:
 def longitudinal_plot(
     results: Iterable[result.Result],
     output_filename: PathLike,
-    getter: Callable[
-        [result.BenchmarkComparison], float | None
-    ] = lambda r: r.geometric_mean_float,
+    getter: Callable[[result.BenchmarkComparison], float | None] = lambda r: (
+        r.geometric_mean_float
+    ),
     differences: tuple[str, str] = ("slower", "faster"),
     title="Performance improvement by configuration",
 ):
@@ -442,9 +442,9 @@ class FlagEffectPlotConfig:
 def flag_effect_plot(
     results: Iterable[result.Result],
     output_filename: PathLike,
-    getter: Callable[
-        [result.BenchmarkComparison], float | None
-    ] = lambda r: r.geometric_mean_float,
+    getter: Callable[[result.BenchmarkComparison], float | None] = lambda r: (
+        r.geometric_mean_float
+    ),
     differences: tuple[str, str] = ("slower", "faster"),
     title="Performance improvement by configuration",
 ):
@@ -496,11 +496,10 @@ def flag_effect_plot(
         ] = r
 
     for subplot, ax in zip(subplots, axs):
-
         ax.set_title(f"Effect of {subplot.name}")
         version = tuple(int(x) for x in subplot.version.split("."))
         assert len(version) == 2, (
-            "Version config in {subplot.name}" " should only be major.minor"
+            "Version config in {subplot.name} should only be major.minor"
         )
 
         for runner in cfg.runners.values():

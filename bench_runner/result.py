@@ -280,7 +280,7 @@ class BenchmarkComparison(Comparison):
         elif gm > 1.0:
             return f"{gm:.03f}x faster"
         else:
-            return f"{1.0+(1.0-gm):.03f}x slower"
+            return f"{1.0 + (1.0 - gm):.03f}x slower"
 
     @property
     def geometric_mean(self) -> str:
@@ -874,9 +874,7 @@ def match_to_bases(
                 result,
                 candidates,
                 "base",
-                lambda ref: (
-                    ref.cpython_hash == result.cpython_hash and ref.flags == []
-                ),
+                lambda ref: ref.cpython_hash == result.cpython_hash and ref.flags == [],
             )
 
 

@@ -17,9 +17,8 @@ jobs:
           python-version: "3.11"
           cache: pip
       - name: Install dependencies
-        run: python -m pip install .[test]
-      - name: Run lints
-        run: ./lint.sh
+        run: python -m pip install ".[test]"
+      - uses: j178/prek-action@1382ad72dea72f9d53832f2bcb65b3e87a947204 # v3.0.1
 
   test:
     runs-on: ubuntu-latest
