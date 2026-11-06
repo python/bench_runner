@@ -1,5 +1,10 @@
 ## Unreleased
 
+### Configurable benchmark timeout per runner
+
+Set `timeout_minutes` in a runner's `bench_runner.toml` configuration to
+override its benchmark job timeout.
+
 ### Bugfixes
 
 #### Use PGO on weekly builds
