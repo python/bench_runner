@@ -5,7 +5,20 @@
 
 version: 2
 updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "quarterly"
+    groups:
+      actions:
+        patterns:
+          - "*"
+    cooldown:
+      default-days: 14
+
   - package-ecosystem: "pip" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "quarterly"
+    cooldown:
+      default-days: 14

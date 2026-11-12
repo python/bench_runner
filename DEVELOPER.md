@@ -2,6 +2,15 @@
 
 This repository contains a number of GitHub Actions workflows to run benchmarks on a set of private, self-hosted, bare metal machines.
 
+## CI checks
+
+Install the test dependencies with `python -m pip install '.[test]'`, then run
+`./lint.sh`, which includes zizmor checks for `.github`.
+
+After changing action references or adding workflows under `.github/workflows`,
+run `gh actions-lock` and commit the updated lockfile with the workflow changes.
+This requires the [gh-actions-lock extension](https://github.com/github/gh-actions-lock).
+
 ## The workflows
 
 There is a single user-facing workflow, `benchmark.yml`, that [reuses](https://docs.github.com/en/actions/using-workflows/reusing-workflows) the other workflows, prefixed with `_`.
