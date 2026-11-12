@@ -18,7 +18,7 @@ def output_table(
     """
 
     def output_row(row):
-        fd.write(f'| {" | ".join(row)} |\n')
+        fd.write(f"| {' | '.join(row)} |\n")
 
     output_row(head)
     output_row(col.endswith(":") and "---:" or "---" for col in head)

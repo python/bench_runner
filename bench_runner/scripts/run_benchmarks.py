@@ -337,8 +337,8 @@ def run_summarize_stats(
     - benchmark: {benchmark}
     - fork: {fork}
     - ref: {ref}
-    - commit hash: {git.get_git_hash(Path('cpython'))[:7]}
-    - commit date: {git.get_git_commit_date(Path('cpython'))}
+    - commit hash: {git.get_git_hash(Path("cpython"))[:7]}
+    - commit date: {git.get_git_commit_date(Path("cpython"))}
 
     """
     )

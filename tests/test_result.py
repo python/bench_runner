@@ -57,9 +57,9 @@ def test_merge_base(tmp_path, monkeypatch):
     )
     with open(result_with_base) as fd:
         contents = json.load(fd)
-    contents["metadata"][
-        "commit_merge_base"
-    ] = "9d38120e335357a3b294277fd5eff0a10e46e043"
+    contents["metadata"]["commit_merge_base"] = (
+        "9d38120e335357a3b294277fd5eff0a10e46e043"
+    )
     with open(result_with_base, "w") as fd:
         json.dump(contents, fd)
     # End hack
