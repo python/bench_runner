@@ -147,7 +147,8 @@ jobs:
         with:
           add: results
           push: false
-      - name: Push results with retry
+      - &push-results-unix
+        name: Push results with retry
         if: ${{ steps.commit.outputs.committed == 'true' }}
         shell: bash
         run: |
@@ -206,23 +207,7 @@ jobs:
         with:
           add: results
           push: false
-      - name: Push results with retry
-        if: ${{ steps.commit.outputs.committed == 'true' }}
-        shell: bash
-        run: |
-          branch="$GITHUB_REF_NAME"
-          for attempt in 1 2 3 4 5; do
-            echo "Push attempt $attempt to origin/$branch"
-            git pull --rebase origin "$branch"
-            if git push origin "HEAD:$branch"; then
-              exit 0
-            fi
-            if [ "$attempt" -lt 5 ]; then
-              sleep $(( RANDOM % 30 + 10 ))
-            fi
-          done
-          echo "Push failed after 5 attempts" >&2
-          exit 1
+      - *push-results-unix
       - name: Upload artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
         with:
