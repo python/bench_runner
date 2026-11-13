@@ -13,6 +13,12 @@ prek install
 prek run --all-files
 ```
 
+The hooks include zizmor checks for `.github`.
+
+After changing action references or adding workflows under `.github/workflows`,
+run `gh actions-lock` and commit the updated lockfile with the workflow changes.
+This requires the [gh-actions-lock extension](https://github.com/github/gh-actions-lock).
+
 ## The workflows
 
 There is a single user-facing workflow, `benchmark.yml`, that [reuses](https://docs.github.com/en/actions/using-workflows/reusing-workflows) the other workflows, prefixed with `_`.

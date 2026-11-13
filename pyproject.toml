@@ -30,7 +30,7 @@ test = [
     "filelock==4.2.9",
     "pyright==1.1.414",
     "pytest==9.2.0",
-    "pytest-cov==6.2.1",
+    "pytest-cov==7.1.0",
     "pytest-xdist==3.8.0",
 ]
 
@@ -55,6 +55,9 @@ extend-ignore = ["E203", "E402"]
 markers = [
     "long_running: marks tests as long_running (deselect with '-m \"not running\"')",
 ]
+
+[tool.coverage.run]
+patch = ["subprocess"]
 
 [tool.coverage.paths]
 source = [
