@@ -133,8 +133,9 @@ def add_flag_env(jobs: dict[str, Any]):
             job.setdefault("env", {})
             job["env"]["flags"] = flag_value
             for step in job["steps"]:
-                if "run" in step:
-                    step["run"] = step["run"].replace("${{ env.flags }}", flag_value)
+                for key, value in step.get("env", {}).items():
+                    if isinstance(value, str):
+                        step["env"][key] = value.replace("${{ env.flags }}", flag_value)
 
 
 def generate__benchmark(src: Any) -> Any:
@@ -271,6 +272,7 @@ def generate__weekly(dst: Any) -> Any:
                 )
             job = {
                 "uses": "./.github/workflows/_benchmark.yml",
+                "permissions": {"contents": "write"},
                 "needs": "determine_head",
                 "with": {
                     "fork": "python",
@@ -280,7 +282,6 @@ def generate__weekly(dst: Any) -> Any:
                     "pgo": True,
                     **flags.flags_to_gha_variables_yml(weekly_cfg.flags),
                 },
-                "secrets": "inherit",
             }
             job_name = f"weekly-{name}-{runner.nickname}"
             dst["jobs"][job_name] = job

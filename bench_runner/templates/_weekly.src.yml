@@ -6,12 +6,16 @@ name: _weekly
     - cron: "0 0 * * 0"
   workflow_dispatch: {}
 
+permissions: {}
+
 jobs:
   # Determine the base commit of the selected commit. The output is passed to
   # the `base` job below. If the data already exists for this commit, it will be
   # skipped.
   determine_head:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       commit: ${{ steps.head.outputs.commit }}
     steps:
@@ -26,38 +30,44 @@ jobs:
         id: head
         run: |
           cd cpython
-          git log -n 1 --format="commit=%H" >> $GITHUB_OUTPUT
+          git log -n 1 --format="commit=%H" >> "$GITHUB_OUTPUT"
 
   pystats:
     uses: ./.github/workflows/_pystats.yml
+    permissions:
+      contents: write
     needs: determine_head
     with:
       fork: python
       ref: ${{ needs.determine_head.outputs.commit }}
       benchmarks: all
       tier2: false
-    secrets: inherit
 
   pystats-tier2:
     uses: ./.github/workflows/_pystats.yml
+    permissions:
+      contents: write
     needs: determine_head
     with:
       fork: python
       ref: ${{ needs.determine_head.outputs.commit }}
       benchmarks: all
       tier2: true
-    secrets: inherit
 
   generate:
     uses: ./.github/workflows/_generate.yml
+    permissions:
+      contents: write
     if: ${{ always() }}
     with:
       force: false
     needs: [pystats, pystats-tier2]
-    secrets: inherit
 
   publish:
     uses: ./.github/workflows/_publish.yml
+    permissions:
+      contents: read
     if: ${{ always() }}
     needs: [generate]
-    secrets: inherit
+    secrets:
+      BENCHMARK_MIRROR: ${{ secrets.BENCHMARK_MIRROR }}

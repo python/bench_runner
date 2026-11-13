@@ -22,13 +22,18 @@ name: _generate
         type: boolean
         default: false
 
+permissions: {}
+
 jobs:
   generate-results:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout benchmarking
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: true
           ref: main
       - name: Checkout CPython
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

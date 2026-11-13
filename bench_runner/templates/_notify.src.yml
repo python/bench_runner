@@ -15,9 +15,15 @@ name: _notify
       version:
         type: string
 
+permissions: {}
+
 jobs:
   notify:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      issues: write
     steps:
       - uses: technote-space/workflow-conclusion-action@45ce8e0eb155657ab8ccf346ade734257fd196a5 #v3.0.3
       - name: Checkout benchmarking
@@ -34,6 +40,12 @@ jobs:
           pip install -r requirements.txt
       - name: Send notifications
         if: env.WORKFLOW_CONCLUSION == 'success'
-        run: python -m bench_runner notify --fork ${{ inputs.fork }} --ref ${{ inputs.ref }} --head ${{ inputs.head }} --date ${{ inputs.date }} --version ${{ inputs.version }} --flags ${{ env.flags }}
+        run: python -m bench_runner notify --fork "$FORK" --ref "$REF" --head "$HEAD" --date "$DATE" --version "$VERSION" --flags "$FLAGS"
         env:
           GH_TOKEN: ${{ github.token }}
+          FORK: ${{ inputs.fork }}
+          REF: ${{ inputs.ref }}
+          HEAD: ${{ inputs.head }}
+          DATE: ${{ inputs.date }}
+          VERSION: ${{ inputs.version }}
+          FLAGS: ${{ env.flags }}

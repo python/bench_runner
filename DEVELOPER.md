@@ -13,7 +13,8 @@ prek install
 prek run --all-files
 ```
 
-The hooks include zizmor checks for `.github`.
+The hooks include zizmor checks for `.github` and the workflow templates in
+`bench_runner/templates`.
 
 After changing action references or adding workflows under `.github/workflows`,
 run `gh actions-lock` and commit the updated lockfile with the workflow changes.

@@ -37,12 +37,18 @@ name: _pystats
         description: "Rerun and replace results if commit already exists"
         type: boolean
 
+permissions: {}
+
 jobs:
   collect-stats:
     runs-on: [self-hosted, linux, cloud]
+    permissions:
+      contents: write
     steps:
       - name: Checkout benchmarking
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
       - name: git gc
         run: |
           git gc
@@ -51,8 +57,13 @@ jobs:
         with:
           python-version: "3.15"
       - name: Build CPython and run pyperformance benchmarks
+        env:
+          FORK: ${{ inputs.fork }}
+          REF: ${{ inputs.ref }}
+          BENCHMARKS: ${{ inputs.benchmarks || 'all' }}
+          FLAGS: ${{ env.flags }}
         run: |
-          python workflow_bootstrap.py --pystats ${{ inputs.fork }} ${{ inputs.ref }} all ${{ inputs.benchmarks || 'all' }} ${{ env.flags }} --run_id ${{ github.run_id }}
+          python workflow_bootstrap.py --pystats "$FORK" "$REF" all "$BENCHMARKS" "$FLAGS" --run_id ${{ github.run_id }}
       - name: Pull benchmarking
         run: |
           # Another benchmarking task may have created results for the same

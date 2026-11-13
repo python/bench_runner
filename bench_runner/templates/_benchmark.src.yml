@@ -55,9 +55,13 @@ name: _benchmark
         description: "Collect Linux perf profiling data (Linux only)"
         type: boolean
 
+permissions: {}
+
 jobs:
   benchmark-windows:
     runs-on: [self-hosted, windows, bare-metal]
+    permissions:
+      contents: write
 
     steps:
       # Tell git to checkout repos with symlinks (required by pyston
@@ -68,12 +72,20 @@ jobs:
           git config --global core.symlinks true
       - name: Checkout benchmarking
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
       - name: git gc
         run: |
           git gc
       - name: Building Python and running pyperformance
+        env:
+          FORK: ${{ inputs.fork }}
+          REF: ${{ inputs.ref }}
+          MACHINE: ${{ inputs.machine }}
+          BENCHMARKS: ${{ inputs.benchmarks || 'all' }}
+          FLAGS: ${{ env.flags }}
         run: |
-          py workflow_bootstrap.py ${{ inputs.fork }} ${{ inputs.ref }} ${{ inputs.machine }} ${{ inputs.benchmarks || 'all' }} "${{ env.flags }}" ${{ inputs.force && '--force' || '' }} ${{ inputs.pgo && '--pgo' || '' }} --run_id ${{ github.run_id }}
+          py workflow_bootstrap.py $env:FORK $env:REF $env:MACHINE $env:BENCHMARKS "$env:FLAGS" ${{ inputs.force && '--force' || '' }} ${{ inputs.pgo && '--pgo' || '' }} --run_id ${{ github.run_id }}
       # Pull again, since another job may have committed results in the meantime
       - name: Pull benchmarking
         run: |
@@ -97,10 +109,14 @@ jobs:
   benchmark-linux:
     runs-on: [self-hosted, linux, bare-metal]
     timeout-minutes: 1440
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout benchmarking
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
       - name: git gc
         run: |
           git gc
@@ -111,8 +127,14 @@ jobs:
         with:
           python-version: "3.15"
       - name: Building Python and running pyperformance
+        env:
+          FORK: ${{ inputs.fork }}
+          REF: ${{ inputs.ref }}
+          MACHINE: ${{ inputs.machine }}
+          BENCHMARKS: ${{ inputs.benchmarks || 'all' }}
+          FLAGS: ${{ env.flags }}
         run: |
-          python workflow_bootstrap.py ${{ inputs.fork }} ${{ inputs.ref }} ${{ inputs.machine }} ${{ inputs.benchmarks || 'all' }} ${{ env.flags }} ${{ inputs.force && '--force' || '' }} ${{ inputs.pgo && '--pgo' || '' }} ${{ inputs.perf && '--perf' || '' }} --run_id ${{ github.run_id }}
+          python workflow_bootstrap.py "$FORK" "$REF" "$MACHINE" "$BENCHMARKS" "$FLAGS" ${{ inputs.force && '--force' || '' }} ${{ inputs.pgo && '--pgo' || '' }} ${{ inputs.perf && '--perf' || '' }} --run_id ${{ github.run_id }}
       # Pull again, since another job may have committed results in the meantime
       - name: Pull benchmarking
         if: ${{ !inputs.perf }}
@@ -145,16 +167,26 @@ jobs:
 
   benchmark-darwin:
     runs-on: [self-hosted, macos, bare-metal]
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout benchmarking
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
       - name: git gc
         run: |
           git gc
       - name: Building Python and running pyperformance
+        env:
+          FORK: ${{ inputs.fork }}
+          REF: ${{ inputs.ref }}
+          MACHINE: ${{ inputs.machine }}
+          BENCHMARKS: ${{ inputs.benchmarks || 'all' }}
+          FLAGS: ${{ env.flags }}
         run: |
-          python3 workflow_bootstrap.py ${{ inputs.fork }} ${{ inputs.ref }} ${{ inputs.machine }} ${{ inputs.benchmarks || 'all' }} ${{ env.flags }} ${{ inputs.force && '--force' || '' }} ${{ inputs.pgo && '--pgo' || '' }} --run_id ${{ github.run_id }}
+          python3 workflow_bootstrap.py "$FORK" "$REF" "$MACHINE" "$BENCHMARKS" "$FLAGS" ${{ inputs.force && '--force' || '' }} ${{ inputs.pgo && '--pgo' || '' }} --run_id ${{ github.run_id }}
       # Pull again, since another job may have committed results in the meantime
       - name: Pull benchmarking
         run: |

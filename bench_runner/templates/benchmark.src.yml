@@ -32,12 +32,16 @@ run-name: benchmarking ${{ inputs.fork }}/${{ inputs.ref }} on ${{ inputs.machin
         type: boolean
         default: false
 
+permissions: {}
+
 jobs:
   # Determine the base commit of the selected commit. The output is passed to
   # the `base` job below. If the data already exists for this commit, it will be
   # skipped.
   determine_base:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       head: ${{ steps.base.outputs.head }}
       date: ${{ steps.base.outputs.date }}
@@ -67,12 +71,19 @@ jobs:
           pip install -r requirements.txt
       - name: Determine base
         id: base
+        env:
+          BENCHMARK_BASE: ${{ inputs.benchmark_base }}
+          MACHINE: ${{ inputs.machine }}
+          PYSTATS: ${{ inputs.pystats }}
+          FLAGS: ${{ env.flags }}
         run: |
-          python -m bench_runner get_merge_base ${{ inputs.benchmark_base }} ${{ inputs.machine }} ${{ inputs.pystats }} ${{ env.flags }} >> $GITHUB_OUTPUT
-          cat $GITHUB_OUTPUT
+          python -m bench_runner get_merge_base "$BENCHMARK_BASE" "$MACHINE" "$PYSTATS" "$FLAGS" >> "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
 
   head:
     uses: ./.github/workflows/_benchmark.yml
+    permissions:
+      contents: write
     with:
       fork: ${{ inputs.fork }}
       ref: ${{ inputs.ref }}
@@ -81,10 +92,11 @@ jobs:
       pgo: true
       perf: false
       force: true
-    secrets: inherit
 
   base:
     uses: ./.github/workflows/_benchmark.yml
+    permissions:
+      contents: write
     needs: determine_base
     if: ${{ needs.determine_base.outputs.need_to_run != 'false' }}
     with:
@@ -95,20 +107,22 @@ jobs:
       pgo: true
       perf: false
       force: false
-    secrets: inherit
 
   pystats-head:
     uses: ./.github/workflows/_pystats.yml
+    permissions:
+      contents: write
     if: ${{ inputs.pystats }}
     with:
       fork: ${{ inputs.fork }}
       ref: ${{ inputs.ref }}
       benchmarks: ${{ inputs.benchmarks }}
       force: true
-    secrets: inherit
 
   pystats-base:
     uses: ./.github/workflows/_pystats.yml
+    permissions:
+      contents: write
     needs: determine_base
     if: ${{ inputs.pystats && needs.determine_base.outputs.need_to_run != 'false' }}
     with:
@@ -116,24 +130,31 @@ jobs:
       ref: ${{ needs.determine_base.outputs.ref }}
       benchmarks: ${{ inputs.benchmarks }}
       force: false
-    secrets: inherit
 
   generate:
     uses: ./.github/workflows/_generate.yml
+    permissions:
+      contents: write
     with:
       force: false
     if: ${{ always() }}
     needs: [head, base, pystats-head, pystats-base]
-    secrets: inherit
 
   publish:
     uses: ./.github/workflows/_publish.yml
+    permissions:
+      contents: read
     if: ${{ always() }}
     needs: [generate]
-    secrets: inherit
+    secrets:
+      BENCHMARK_MIRROR: ${{ secrets.BENCHMARK_MIRROR }}
 
   notify:
     uses: ./.github/workflows/_notify.yml
+    permissions:
+      actions: read
+      contents: read
+      issues: write
     if: ${{ always() }}
     needs: [publish, determine_base]
     with:
@@ -142,4 +163,3 @@ jobs:
       head: ${{ needs.determine_base.outputs.head }}
       date: ${{ needs.determine_base.outputs.date }}
       version: ${{ needs.determine_base.outputs.version }}
-    secrets: inherit

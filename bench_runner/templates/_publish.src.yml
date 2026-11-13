@@ -7,6 +7,9 @@ name: _publish
       dry_run:
         type: boolean
         default: false
+    secrets:
+      BENCHMARK_MIRROR:
+        required: true
 
   workflow_dispatch:
     inputs:
@@ -15,13 +18,18 @@ name: _publish
         type: boolean
         default: false
 
+permissions: {}
+
 jobs:
   mirror:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout benchmarking
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: true
           ref: main
           # This has to be enough depth to handle since the last time we published.
           # As a rule of thumb, (number of machines * 2, plus the generated stuff) * 2
@@ -29,5 +37,5 @@ jobs:
           token: ${{ secrets.BENCHMARK_MIRROR }}
       - name: Mirror
         run: |
-          git remote add public https://github.com/${{ github.repository }}-public
+          git remote add public "https://github.com/$GITHUB_REPOSITORY-public"
           git push -f public main

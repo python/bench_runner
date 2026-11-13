@@ -16,6 +16,11 @@ repos:
         files: ^\.github/
         types: [file]  # Include actions.lock.
         stages: [pre-commit]
+      - id: zizmor
+        name: zizmor (templates)
+        args: [--offline]
+        files: ^bench_runner/templates/.*\.src\.yml$
+        stages: [pre-commit]
 
   - repo: local
     hooks:
