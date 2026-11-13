@@ -144,7 +144,7 @@ def clone(
 
     dirname = Path(dirname)
     if dirname.is_dir():
-        if is_hash and (dirname / ".git").is_dir() and get_git_hash(dirname) == branch:
+        if is_hash and (dirname / ".git").is_dir() and get_log("%H", dirname) == branch:
             # This is a git repo, and the hash matches
             return
         util.smart_rmtree(dirname)

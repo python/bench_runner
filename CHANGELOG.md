@@ -13,6 +13,11 @@ macOS builds now default to Homebrew's `openssl@3` instead of the removed `opens
 If `openssl@3` is not installed, run `brew install openssl@3` on existing macOS
 runners before you update `bench_runner`.
 
+#### Reuse checkouts at the requested commit
+
+When a repository is already checked out at the requested full commit hash,
+reuse it instead of deleting and cloning it again.
+
 #### Use PGO on weekly builds
 
 Since 2.0.0, PGO was not being used on weekly builds. This is now fixed.
