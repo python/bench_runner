@@ -46,8 +46,16 @@ class Runner:
     # The number of cores to use to compile CPython. If not provided, `make -j`
     # will be used.
     use_cores: int | None = None
+    # Benchmark job timeout in minutes. None uses the workflow template's default.
+    timeout_minutes: int | None = None
 
     def __post_init__(self):
+        if self.timeout_minutes is not None and (
+            type(self.timeout_minutes) is not int or self.timeout_minutes <= 0
+        ):
+            raise ValueError(
+                f"Runner {self.nickname!r}: timeout_minutes must be a positive integer"
+            )
         if self.github_runner_name is None:
             self.github_runner_name = self.name
         if self.plot is None:

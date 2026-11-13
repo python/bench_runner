@@ -2,6 +2,17 @@
 
 This repository contains a number of GitHub Actions workflows to run benchmarks on a set of private, self-hosted, bare metal machines.
 
+## Linting
+
+We recommend [prek](https://prek.j178.dev/) to run the hooks in
+`.pre-commit-config.yaml`. From the repository root, with a virtual environment active:
+
+```sh
+python -m pip install -e ".[test]" prek
+prek install
+prek run --all-files
+```
+
 ## The workflows
 
 There is a single user-facing workflow, `benchmark.yml`, that [reuses](https://docs.github.com/en/actions/using-workflows/reusing-workflows) the other workflows, prefixed with `_`.
