@@ -2,10 +2,18 @@
 
 This repository contains a number of GitHub Actions workflows to run benchmarks on a set of private, self-hosted, bare metal machines.
 
-## CI checks
+## Linting
 
-Install the test dependencies with `python -m pip install '.[test]'`, then run
-`./lint.sh`, which includes zizmor checks for `.github`.
+We recommend [prek](https://prek.j178.dev/) to run the hooks in
+`.pre-commit-config.yaml`. From the repository root, with a virtual environment active:
+
+```sh
+python -m pip install -e ".[test]" prek
+prek install
+prek run --all-files
+```
+
+The hooks include zizmor checks for `.github`.
 
 After changing action references or adding workflows under `.github/workflows`,
 run `gh actions-lock` and commit the updated lockfile with the workflow changes.
