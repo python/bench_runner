@@ -57,7 +57,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 #### Install brew packages
 
 ```bash session
-brew install openssl jq python@3.9 coreutils ccache
+brew install openssl@3 jq python@3.9 coreutils ccache
 ```
 
 ## Microsoft Windows
