@@ -67,7 +67,7 @@ jobs:
         run: |
           git config --global core.symlinks true
       - name: Checkout benchmarking
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: git gc
         run: |
           git gc
@@ -83,11 +83,11 @@ jobs:
           # just pulled in in that case.
           git pull -s recursive -X ours --autostash --rebase
       - name: Add data to repo
-        uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 #v10.0.0
+        uses: EndBug/add-and-commit@cc9c08ba6c8df3b93a8f2db63e89b98368ae2ae8 #v11.1.1
         with:
           add: results
       - name: Upload artifacts
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.0
         with:
           name: benchmark-${{ env.BENCHMARK_MACHINE_NICKNAME }}-${{ env.flags }}-${{ job.check_run_id }}
           path: |
@@ -100,14 +100,14 @@ jobs:
 
     steps:
       - name: Checkout benchmarking
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: git gc
         run: |
           git gc
       - uses: fregante/setup-git-user@024bc0b8e177d7e77203b48dab6fb45666854b35 # v2.0.2
       - name: Setup system Python
         if: ${{ runner.arch == 'X64' }}
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.11"
       - name: Building Python and running pyperformance
@@ -124,12 +124,12 @@ jobs:
           git pull -s recursive -X ours --autostash --rebase
       - name: Adding data to repo
         if: ${{ !inputs.perf }}
-        uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 #v10.0.0
+        uses: EndBug/add-and-commit@cc9c08ba6c8df3b93a8f2db63e89b98368ae2ae8 #v11.1.1
         with:
           add: results
       - name: Upload benchmark artifacts
         if: ${{ !inputs.perf }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.0
         with:
           name: benchmark-${{ env.BENCHMARK_MACHINE_NICKNAME }}-${{ env.flags }}-${{ job.check_run_id }}
           path: |
@@ -137,7 +137,7 @@ jobs:
           overwrite: true
       - name: Upload perf artifacts
         if: ${{ inputs.perf }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.0
         with:
           name: perf-${{ env.BENCHMARK_MACHINE_NICKNAME }}-${{ env.flags }}-${{ job.check_run_id }}
           path: |
@@ -148,7 +148,7 @@ jobs:
 
     steps:
       - name: Checkout benchmarking
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: git gc
         run: |
           git gc
@@ -164,11 +164,11 @@ jobs:
           # just pulled in in that case.
           git pull -s recursive -X ours --autostash --rebase
       - name: Add data to repo
-        uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 #v10.0.0
+        uses: EndBug/add-and-commit@cc9c08ba6c8df3b93a8f2db63e89b98368ae2ae8 #v11.1.1
         with:
           add: results
       - name: Upload artifacts
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.0
         with:
           name: benchmark-${{ env.BENCHMARK_MACHINE_NICKNAME }}-${{ env.flags }}-${{ job.check_run_id }}
           path: |

@@ -15,13 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v6.2.0
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.11"
           cache: pip
       - name: Install dependencies
         run: python -m pip install ".[test]"
-      - uses: j178/prek-action@v3.0.1
+      - uses: j178/prek-action@v3.1.0

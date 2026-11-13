@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-slim
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: Verify workflow lockfile
@@ -31,10 +31,10 @@ jobs:
       matrix:
         python_version: ["3.11", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v6.2.0
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: ${{ matrix.python_version }}
           cache: pip
@@ -48,10 +48,10 @@ jobs:
   long_test_linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v6.2.0
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: 3.13
           cache: pip
@@ -65,10 +65,10 @@ jobs:
   long_test_windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v6.2.0
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: 3.13
           cache: pip
