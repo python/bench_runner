@@ -18,6 +18,10 @@ name: _publish
 jobs:
   mirror:
     runs-on: ubuntu-latest
+    concurrency:
+      group: publish-mirror
+      cancel-in-progress: false
+      queue: max
     steps:
       - name: Checkout benchmarking
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
