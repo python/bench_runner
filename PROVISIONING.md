@@ -65,7 +65,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 #### Install brew packages
 
 ```bash session
-brew install openssl jq python coreutils ccache
+brew install openssl@3 jq python coreutils ccache
 ```
 
 An existing Python 3.11 or later installation is also supported. Make sure
