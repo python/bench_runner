@@ -83,9 +83,27 @@ jobs:
           # just pulled in in that case.
           git pull -s recursive -X ours --autostash --rebase
       - name: Add data to repo
+        id: commit
         uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 #v10.0.0
         with:
           add: results
+          push: false
+      - name: Push results with retry
+        if: ${{ steps.commit.outputs.committed == 'true' }}
+        shell: powershell
+        run: |
+          $branch = $env:GITHUB_REF_NAME
+          for ($attempt = 1; $attempt -le 5; $attempt++) {
+            Write-Host "Push attempt $attempt to origin/$branch"
+            git pull --rebase origin $branch
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            git push origin "HEAD:$branch"
+            if ($LASTEXITCODE -eq 0) { exit 0 }
+            if ($attempt -lt 5) {
+              Start-Sleep -Seconds (Get-Random -Minimum 10 -Maximum 40)
+            }
+          }
+          throw "Push failed after 5 attempts"
       - name: Upload artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
         with:
@@ -123,10 +141,30 @@ jobs:
           # just pulled in in that case.
           git pull -s recursive -X ours --autostash --rebase
       - name: Adding data to repo
+        id: commit
         if: ${{ !inputs.perf }}
         uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 #v10.0.0
         with:
           add: results
+          push: false
+      - &push-results-unix
+        name: Push results with retry
+        if: ${{ steps.commit.outputs.committed == 'true' }}
+        shell: bash
+        run: |
+          branch="$GITHUB_REF_NAME"
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt to origin/$branch"
+            git pull --rebase origin "$branch"
+            if git push origin "HEAD:$branch"; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 5 ]; then
+              sleep $(( RANDOM % 30 + 10 ))
+            fi
+          done
+          echo "Push failed after 5 attempts" >&2
+          exit 1
       - name: Upload benchmark artifacts
         if: ${{ !inputs.perf }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
@@ -164,9 +202,12 @@ jobs:
           # just pulled in in that case.
           git pull -s recursive -X ours --autostash --rebase
       - name: Add data to repo
+        id: commit
         uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 #v10.0.0
         with:
           add: results
+          push: false
+      - *push-results-unix
       - name: Upload artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
         with:
