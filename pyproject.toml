@@ -56,6 +56,9 @@ markers = [
     "long_running: marks tests as long_running (deselect with '-m \"not running\"')",
 ]
 
+[tool.coverage.run]
+patch = ["subprocess"]
+
 [tool.coverage.paths]
 source = [
     "bench_runner",
