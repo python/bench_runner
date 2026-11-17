@@ -61,7 +61,7 @@ def compare_pair(
     output_dir = Path(output_dir)
 
     rich.print(
-        f"Comparing {counter[0]+1: 2}/{counter[1]: 2}: {head_name} vs. {ref_name}"
+        f"Comparing {counter[0] + 1: 2}/{counter[1]: 2}: {head_name} vs. {ref_name}"
     )
     counter[0] += 1
 

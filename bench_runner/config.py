@@ -82,7 +82,8 @@ class Config:
             )
         self.runners = {
             name: mrunners.Runner(
-                nickname=name, **runner  # pyright: ignore[reportCallIssue]
+                nickname=name,
+                **runner,  # pyright: ignore[reportCallIssue]
             )
             for name, runner in self.runners.items()
         }

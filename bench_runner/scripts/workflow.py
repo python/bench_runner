@@ -143,7 +143,7 @@ def compile_unix(
     env = os.environ.copy()
 
     if util.get_simple_platform() == "macos":
-        openssl_prefix = util.get_brew_prefix("openssl@1.1")
+        openssl_prefix = util.get_brew_prefix("openssl@3")
         env["PKG_CONFIG_PATH"] = f"{openssl_prefix}/lib/pkgconfig"
 
     args = []

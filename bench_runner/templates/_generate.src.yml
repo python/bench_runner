@@ -27,26 +27,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout benchmarking
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
       - name: Checkout CPython
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           repository: python/cpython
           path: cpython
       - name: Setup system Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          python-version: "3.11"
+          python-version: "3.15"
           cache: pip
       - name: Install dependencies from PyPI
         run: python -m pip install -r requirements.txt
       - name: Regenerate derived data
         run: python -m bench_runner generate_results ${{ inputs.force == true && '--force' || '' }}
       - name: Add to repo
-        uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 #v10.0.0
+        uses: EndBug/add-and-commit@cc9c08ba6c8df3b93a8f2db63e89b98368ae2ae8 #v11.1.1
         if: ${{ !inputs.dry_run }}
         with:
           add: "['results', 'README.md', 'RESULTS.md', 'longitudinal.svg', 'longitudinal.json', 'configs.svg', 'configs.json', 'memory_long.svg', 'memory_long.json', 'memory_configs.svg', 'memory_configs.json']"

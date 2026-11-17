@@ -98,6 +98,12 @@ You may limit the number of cores used to build Python with the `use_cores` opti
 use_cores = 2
 ```
 
+Set `timeout_minutes` to a positive integer to limit a runner's entire benchmark job runtime in minutes, including building CPython and running the benchmarks. If omitted, the workflow template's default applies (Linux: 1440; otherwise GitHub's default).
+
+```
+timeout_minutes = 210
+```
+
 ### Try a benchmarking run
 
 There are instructions for running a benchmarking action already in the `README.md` of your repo. Look there and give it a try!

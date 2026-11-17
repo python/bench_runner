@@ -337,8 +337,8 @@ def run_summarize_stats(
     - benchmark: {benchmark}
     - fork: {fork}
     - ref: {ref}
-    - commit hash: {git.get_git_hash(Path('cpython'))[:7]}
-    - commit date: {git.get_git_commit_date(Path('cpython'))}
+    - commit hash: {git.get_git_hash(Path("cpython"))[:7]}
+    - commit date: {git.get_git_commit_date(Path("cpython"))}
 
     """
     )
@@ -462,13 +462,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # This lets pytest-cov collect coverage data in a subprocess
-    if "COV_CORE_SOURCE" in os.environ:
-        try:
-            from pytest_cov.embed import init
-
-            init()
-        except Exception:
-            sys.stderr.write("pytest-cov: Failed to setup subprocess coverage.")
-
     main()

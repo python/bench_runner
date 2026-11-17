@@ -42,14 +42,14 @@ jobs:
     runs-on: [self-hosted, linux, cloud]
     steps:
       - name: Checkout benchmarking
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: git gc
         run: |
           git gc
       - name: Setup system Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          python-version: "3.11"
+          python-version: "3.15"
       - name: Build CPython and run pyperformance benchmarks
         run: |
           python workflow_bootstrap.py --pystats ${{ inputs.fork }} ${{ inputs.ref }} all ${{ inputs.benchmarks || 'all' }} ${{ env.flags }} --run_id ${{ github.run_id }}
@@ -61,6 +61,6 @@ jobs:
           # just pulled in in that case.
           git pull -s recursive -X ours --autostash --rebase
       - name: Add data to repo
-        uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 #v10.0.0
+        uses: EndBug/add-and-commit@cc9c08ba6c8df3b93a8f2db63e89b98368ae2ae8 #v11.1.1
         with:
           add: results

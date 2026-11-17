@@ -2,6 +2,12 @@
 
 This document describes how to set up machines to serve as self-hosted runners for `bench_runner`.
 
+The Python interpreter running `bench_runner` must be Python 3.11 or later.
+The generated Linux x86-64 benchmark jobs and pystats jobs request Python 3.15
+through `actions/setup-python`. Other benchmark jobs use `python` on Linux,
+`python3` on macOS, or `py` on Windows; these commands must select a supported
+interpreter for the runner service account.
+
 These instructions are only a WFM™ rough guide: This is the sort of information that gets out of date rather quickly.
 
 While cloud VMs will *work*, we highly recommend using bare metal machines for the most stable results.
@@ -19,7 +25,9 @@ sudo apt install python3 build-essential ccache gdb lcov pkg-config \
       lzma lzma-dev tk-dev uuid-dev zlib1g-dev linux-perf
 ```
 
-The self-hosted runner needs to have `python` be Python 3.9 or later.
+Install Python 3.11 or later with `pip` and `venv` support, and make sure `python`
+selects it on the runner service's `PATH`. Verify this with
+`python --version` as the account that runs the service.
 
 ### Enable ccache
 
@@ -57,8 +65,11 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 #### Install brew packages
 
 ```bash session
-brew install openssl jq python@3.9 coreutils ccache
+brew install openssl@3 jq python coreutils ccache
 ```
+
+An existing Python 3.11 or later installation is also supported. Make sure
+`python3 --version` selects a supported version as the account running the runner service.
 
 ## Microsoft Windows
 
@@ -86,7 +97,9 @@ Install [git for Windows](https://git-scm.com/download/win).
 
 ### Install Python
 
-Install Python 3.9 or later from [python.org](https://python.org), and install for all users.
+Install Python 3.11 or later from [python.org](https://python.org), and make it
+available to the account running the runner service. Verify that `py --version`
+selects a supported version for that account.
 
 ### Install Clang 19
 

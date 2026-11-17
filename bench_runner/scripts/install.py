@@ -178,6 +178,12 @@ def generate__benchmark(src: Any) -> Any:
 
         runner_template["runs-on"].append(runner.github_runner_name)
 
+        if runner.timeout_minutes is not None:
+            # Keep the timeout immediately after runs-on in generated YAML.
+            runner_template.pop("timeout-minutes", None)
+            idx = list(runner_template).index("runs-on") + 1
+            runner_template.insert(idx, "timeout-minutes", runner.timeout_minutes)
+
         machine_clauses = [
             f"inputs.machine == '{runner.name}'",
             "inputs.machine == '__really_all'",
@@ -220,9 +226,9 @@ def generate_benchmark(dst: Any) -> Any:
             continue
         if "with" in job:
             for flag in flags.FLAGS:
-                job["with"][
-                    flag.gha_variable
-                ] = f"${{{{ inputs.{flag.gha_variable} }}}}"
+                job["with"][flag.gha_variable] = (
+                    f"${{{{ inputs.{flag.gha_variable} }}}}"
+                )
 
     # Include all of the flags in the human-readable workflow "run name"
     dst["run-name"] += " " + " ".join(
