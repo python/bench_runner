@@ -51,3 +51,5 @@ jobs:
         with:
           add: "['results', 'README.md', 'RESULTS.md', 'longitudinal.svg', 'longitudinal.json', 'configs.svg', 'configs.json', 'memory_long.svg', 'memory_long.json', 'memory_configs.svg', 'memory_configs.json']"
           message: Benchmarking results for @${{ github.actor }}
+          pull: --rebase --autostash origin main
+          push_attempts: 5

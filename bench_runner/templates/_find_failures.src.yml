@@ -28,3 +28,5 @@ jobs:
         with:
           add: "['failures.md']"
           message: Benchmarking failures
+          pull: --rebase --autostash origin "${{ github.ref_name }}"
+          push_attempts: 5
