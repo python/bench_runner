@@ -6,6 +6,7 @@ workflows:
     '.github/workflows/ci.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-python@v7.1.0'
+        - 're-actors/alls-green@v1.3.0'
     '.github/workflows/lint.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-python@v7.1.0'
@@ -60,6 +61,11 @@ dependencies:
         repo_id: 178055147
         uses:
             - 'actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405'
+    're-actors/alls-green@v1.3.0':
+        ref: 'v1.3.0'
+        commit: 'sha1-b5b5b37504aa4183270bd3d855c52a67f212be35'
+        owner_id: 46427759
+        repo_id: 434447646
     'sigstore/gh-action-sigstore-python@v3.5.0':
         ref: 'v3.5.0'
         commit: 'sha1-790bc6befb9d733738f18d8f895854b453640ec9'

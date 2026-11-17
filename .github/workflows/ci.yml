@@ -79,3 +79,19 @@ jobs:
         run: |
           python -m pytest tests -m long_running
 
+  all-required-green:
+    name: All required checks pass
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      - lockfile
+      - test
+      - long_test_linux
+      - long_test_windows
+    if: always()
+
+    steps:
+      - name: Check whether the needed jobs succeeded or failed
+        uses: re-actors/alls-green@v1.3.0
+        with:
+          jobs: ${{ toJSON(needs) }}
